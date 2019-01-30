@@ -1,0 +1,22 @@
+version: '2'
+services:
+
+  deploy:
+    build: .
+    working_dir: /root/src/
+    environment:
+      - ENV
+      - GIT_SAFE_BRANCH
+      - DB_SAFE_BRANCH
+    volumes:
+      - "~/.aws:/root/.aws"
+      - "./:/root/src"
+
+  api:
+    image: 'lambci/lambda:build-nodejs8.10'
+    command: 'npm run serve'
+    ports:
+      - "1337:1337"
+    working_dir: /root/src/api
+    volumes:
+      - "./:/root/src/"
